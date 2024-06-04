@@ -1,13 +1,12 @@
+import { Link } from 'react-router-dom';
 import { NavLinksType } from './data';
 
 const NavLinks = ({ title, link, icon_first, icon_second }: NavLinksType) => {
   return (
-    <ul>
-      <li>
-        <img src={icon_first} alt={title} />
-      </li>
-      <li>{title}</li>
-    </ul>
+    <Link to={link}>
+      <img src={icon_first} alt={title} />
+      <span>{title}</span>
+    </Link>
   );
 };
 
