@@ -14,7 +14,7 @@ const initialState: authTypes = {
 };
 
 export const authSlice = createSlice({
-  name: 'counter',
+  name: 'auth',
   initialState,
   reducers: {
     setUserName: (state, action) => {

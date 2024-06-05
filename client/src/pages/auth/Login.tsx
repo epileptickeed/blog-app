@@ -20,11 +20,10 @@ const Login = () => {
       const { data } = await axios.post('/login', postData);
 
       if (data.error) {
-        toast.error('hello');
-        console.log('hello');
+        toast.error(data.error);
       } else {
         toast.success('Success');
-        // navigate('/')
+        navigate('/');
       }
     } catch (error) {
       toast.error('error');

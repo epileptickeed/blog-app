@@ -1,7 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { input_icons } from './data';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { currentUserSelector } from '../../../../redux/currentUserSlice/selector';
 
 const HomeContent = () => {
+  const { currentPosts } = useSelector(currentUserSelector);
+
   const textarea = useRef<HTMLTextAreaElement>(null);
   const textareaValue = textarea.current?.value;
   useEffect(() => {
@@ -16,8 +22,26 @@ const HomeContent = () => {
     textarea.current!.addEventListener('keyup', handler);
   }, [textareaValue]);
 
-  const submitTweet = () => {
-    console.log(textareaValue);
+  const submitTweet = async () => {
+    const postData = {
+      text: textarea.current?.value,
+      date: new Date().toLocaleDateString(),
+    };
+    console.log(postData);
+
+    try {
+      const { data } = await axios.post('/tweet', postData);
+      if (data.error) {
+        toast.error(data.error);
+      } else {
+        toast.success('Tweeted!');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -25,11 +49,7 @@ const HomeContent = () => {
       <div className="tweet_input">
         <div className="tweet_top">
           <img src="/profile.png" alt="your profile picture" />
-          <textarea
-            name=""
-            id="tweet_text"
-            placeholder="What's happening"
-            ref={textarea}></textarea>
+          <textarea name="" id="tweet_text" placeholder="What's happening" ref={textarea} />
         </div>
 
         <div className="tweet_bottom">
@@ -46,6 +66,12 @@ const HomeContent = () => {
             Tweet
           </button>
         </div>
+      </div>
+
+      <div className="tweets">
+        {currentPosts?.map((item, index) => {
+          return <div key={index}>{item.text}</div>;
+        })}
       </div>
     </div>
   );

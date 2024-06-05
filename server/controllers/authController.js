@@ -41,7 +41,12 @@ const registerUser = async (req, res) => {
       name: name,
       email: email,
       password: hashedPassword,
+      posts: [],
+      liked_posts: [],
     });
+
+    await user.save();
+
     return res.json(user);
   } catch (error) {
     console.error(error);
@@ -68,8 +73,11 @@ const loginUser = async (req, res) => {
         password,
       };
       return res.json('passwords match');
-    } else {
-      return res.json('passwords do NOT match');
+    }
+    if (!match) {
+      return res.json({
+        error: 'passwords do not match',
+      });
     }
   } catch (error) {
     console.error(error);

@@ -9,7 +9,7 @@ const app = express();
 app.use(
   session({
     secret: 'some secret',
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 3600000 * 24 * 7 },
     resave: true,
     saveUninitialized: false,
   }),
