@@ -4,13 +4,15 @@ import { authSelector } from '../../../redux/authSlice/selector';
 import { setUserEmail, setUserPassword } from '../../../redux/authSlice/auth';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { useMutation } from 'react-query';
 
 const Login = () => {
+  const mutation = useMutation(Login);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { email, password } = useSelector(authSelector);
 
-  const handleLogin = async () => {
+  async function Login() {
     try {
       const postData = {
         email,
@@ -29,6 +31,10 @@ const Login = () => {
       toast.error('error');
       console.error(error);
     }
+  }
+
+  const handleLogin = () => {
+    mutation.mutate();
   };
 
   return (

@@ -1,15 +1,49 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { input_icons } from './data';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { currentUserSelector } from '../../../../redux/currentUserSlice/selector';
+import { useMutation, useQueryClient } from 'react-query';
+import Tweets from './Tweets';
+
+import CreateTweet from '../../../../utils/CreateTweet';
+import { useNavigate } from 'react-router-dom';
 
 const HomeContent = () => {
-  const { currentPosts } = useSelector(currentUserSelector);
+  const queryClient = useQueryClient();
+
+  const [textValue, setTextValue] = useState('');
 
   const textarea = useRef<HTMLTextAreaElement>(null);
   const textareaValue = textarea.current?.value;
+
+  const navigate = useNavigate();
+
+  const {
+    mutate,
+    data: tweetResult,
+    isSuccess,
+  } = useMutation(() => CreateTweet(textValue), {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      toast.success('Tweeted');
+      setTextValue('');
+    },
+    onError: (error: any) => {
+      if (error.response && error.response.status === 500) {
+        toast.error('Oops, something went wrong: ' + error.response.data.error);
+        navigate('/login');
+      } else if (error.response && error.response.status === 404) {
+        toast.error('Error: ' + error.response.data.error);
+      } else {
+        toast.error('An error occurred');
+      }
+    },
+  });
+
+  const submitTweet = async () => {
+    mutate();
+  };
+
   useEffect(() => {
     const handler = () => {
       if (textarea.current!.value.length > 0) {
@@ -22,34 +56,19 @@ const HomeContent = () => {
     textarea.current!.addEventListener('keyup', handler);
   }, [textareaValue]);
 
-  const submitTweet = async () => {
-    const postData = {
-      text: textarea.current?.value,
-      date: new Date().toLocaleDateString(),
-    };
-    console.log(postData);
-
-    try {
-      const { data } = await axios.post('/tweet', postData);
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        toast.success('Tweeted!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <div className="home_content">
       <div className="tweet_input">
         <div className="tweet_top">
           <img src="/profile.png" alt="your profile picture" />
-          <textarea name="" id="tweet_text" placeholder="What's happening" ref={textarea} />
+          <textarea
+            name=""
+            id="tweet_text"
+            placeholder="What's happening"
+            ref={textarea}
+            value={textValue}
+            onChange={(e) => setTextValue(e.target.value)}
+          />
         </div>
 
         <div className="tweet_bottom">
@@ -69,9 +88,7 @@ const HomeContent = () => {
       </div>
 
       <div className="tweets">
-        {currentPosts?.map((item, index) => {
-          return <div key={index}>{item.text}</div>;
-        })}
+        <Tweets />
       </div>
     </div>
   );
