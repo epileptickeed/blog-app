@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { input_icons } from './data';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import Tweets from './Tweets';
 
@@ -40,10 +39,6 @@ const HomeContent = () => {
     },
   });
 
-  const submitTweet = async () => {
-    mutate();
-  };
-
   useEffect(() => {
     const handler = () => {
       if (textarea.current!.value.length > 0) {
@@ -81,7 +76,7 @@ const HomeContent = () => {
               );
             })}
           </div>
-          <button onClick={() => submitTweet()} className="submit_tweet">
+          <button onClick={() => mutate()} className="submit_tweet">
             Tweet
           </button>
         </div>

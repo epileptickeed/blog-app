@@ -135,8 +135,15 @@ aside {
         background-color: var(--clr-tweet);
         padding: 1rem 2.5rem;
         border-radius: 2rem;
+        font-size: 1rem;
         color: white;
         font-weight: bold;
+        cursor: pointer;
+        transition: 0.25s ease all;
+
+        &:hover {
+          background-color: #4baff1;
+        }
       }
     }
   }
@@ -187,5 +194,24 @@ aside {
     &:hover {
       background: var(--clr-tweet);
     }
+  }
+}
+
+.tweets_inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.posted_tweet {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid;
+  padding: 1rem;
+  border-radius: 1rem;
+
+  .posted_tweet_info {
+    display: flex;
+    justify-content: space-between;
   }
 }
