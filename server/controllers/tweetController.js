@@ -23,6 +23,7 @@ const createTweet = async (req, res) => {
         date: date,
         name: user.name,
         avatar: user.avatar,
+        email: user.email,
         id: crypto.randomUUID(),
         likes: 0,
         comments: [],

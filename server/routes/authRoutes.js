@@ -5,6 +5,7 @@ const { registerUser, loginUser } = require('../controllers/authController');
 const { createTweet } = require('../controllers/tweetController');
 const { getProfile } = require('../controllers/profileController');
 const { getAllTweets } = require('../controllers/allTweetsController');
+const { submitLike } = require('../controllers/likesController');
 
 router.use(
   cors({
@@ -18,5 +19,6 @@ router.post('/login', loginUser);
 router.post('/tweet', createTweet);
 router.get('/getProfile', getProfile);
 router.get('/getAllTweets', getAllTweets);
+router.post('/submitLike', submitLike);
 
 module.exports = router;
