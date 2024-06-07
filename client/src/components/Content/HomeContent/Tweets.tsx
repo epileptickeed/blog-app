@@ -1,11 +1,12 @@
 import axios from 'axios';
 import useGetProfile from '../../../../hooks/useGetProfile';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 
 const Tweets = () => {
   const { data, isLoading, isError } = useGetProfile();
+  const queryClient = useQueryClient();
 
   const [postId, setPostId] = useState('');
   const [postEmail, setPostEmail] = useState('');
@@ -29,6 +30,9 @@ const Tweets = () => {
     },
     onError: () => {
       toast.error('Problim');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
     },
   });
 

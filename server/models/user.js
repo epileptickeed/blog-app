@@ -16,7 +16,17 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  posts: Array,
+  posts: [
+    {
+      id: String,
+      content: String,
+      likes: {
+        type: Number,
+        default: 0,
+      },
+      usersThatLiked: Array,
+    },
+  ],
   liked_posts: Array,
 });
 
