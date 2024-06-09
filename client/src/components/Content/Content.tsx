@@ -1,4 +1,4 @@
-import HomeContent from './HomeContent/Home';
+import HomeContent from "./HomeContent/Home";
 
 const Content = () => {
   return (
