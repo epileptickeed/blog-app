@@ -1,64 +1,48 @@
-import useGetProfile from "../../../../hooks/useGetProfile";
-import { useMutation, useQueryClient } from "react-query";
-import toast from "react-hot-toast";
-import DeleteTweet from "../../../../utils/DeleteTweet";
-import Like from "../../../../utils/LikeTweet";
-import EditTweet from "../../../../utils/EditTweet";
-import { useState } from "react";
-
-type Item = {
-  id: string;
-  email: string;
-  text: string;
-  name: string;
-  avatar: string | null;
-  date: string;
-  likes: number;
-};
+import useGetProfile from '../../../../hooks/useGetProfile';
+import { useMutation, useQueryClient } from 'react-query';
+import toast from 'react-hot-toast';
+import DeleteTweet from '../../../../utils/DeleteTweet';
+import Like from '../../../../utils/LikeTweet';
+import Edit from './Edit';
+import { Item, setIsEditVisible, setTweetInfo } from '../../../../redux/tweetSlice/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { tweetSelector } from '../../../../redux/tweetSlice/selector';
 
 const Tweets = () => {
   const { data, isLoading, isError } = useGetProfile();
   const queryClient = useQueryClient();
 
-  const [open, setOpen] = useState(false);
-  const [tweetInfo, setTweetInfo] = useState<Item[] | any>([]);
+  const dispatch = useDispatch();
+
+  const { isEditVisible } = useSelector(tweetSelector);
 
   const editPopup = (item: Item[]) => {
-    setOpen(true);
-    setTweetInfo(item);
+    dispatch(setIsEditVisible(true));
+    dispatch(setTweetInfo(item));
   };
-
-  console.log(tweetInfo);
 
   const likingTweet = useMutation(({ id, email }: Item) => Like(id, email), {
     onSuccess: () => {
-      toast.success("Liked!");
+      toast.success('Liked!');
     },
     onError: () => {
-      toast.error("Problim");
+      toast.error('Problim');
     },
     onSettled: () => {
       queryClient.invalidateQueries();
     },
   });
 
-  const deletingTweet = useMutation(
-    ({ id, email }: Item) => DeleteTweet(id, email),
-    {
-      onSuccess: () => {
-        toast.success("Tweet Deleted");
-      },
-      onError: () => {
-        toast.error("Problim");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries();
-      },
-    }
-  );
-
-  const editingTweet = useMutation((item) => EditTweet(item), {
-    onSuccess: () => {},
+  const deletingTweet = useMutation(({ id, email }: Item) => DeleteTweet(id, email), {
+    onSuccess: () => {
+      toast.success('Tweet Deleted');
+    },
+    onError: () => {
+      toast.error('Problim');
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -69,8 +53,6 @@ const Tweets = () => {
     return <div>You need to login first, to see your tweets</div>;
   }
   const recentPosts = [...posts].reverse();
-
-  // console.log(recentPosts);
 
   return (
     <div className="tweets_inner">
@@ -99,8 +81,7 @@ const Tweets = () => {
                         id: item.id,
                         email: item.email,
                       } as Item)
-                    }
-                  >
+                    }>
                     like
                   </button>
                 </div>
@@ -112,15 +93,12 @@ const Tweets = () => {
                         id: item.id,
                         email: item.email,
                       } as Item)
-                    }
-                  >
+                    }>
                     delete
                   </button>
                 </div>
                 <div className="posted_tweet_actions_edit">
-                  <button onClick={() => editPopup({ ...item } as any)}>
-                    edit
-                  </button>
+                  <button onClick={() => editPopup({ ...item } as any)}>edit</button>
                 </div>
               </div>
             </div>
@@ -128,21 +106,8 @@ const Tweets = () => {
         })
       )}
 
-      <div className={open ? "edit_tweet_popup" : "notActive"}>
-        {tweetInfo?.name}
-        {tweetInfo?.date}
-        <textarea
-          value={tweetInfo?.text}
-          onChange={(e) => {
-            if (tweetInfo) {
-              setTweetInfo({ ...tweetInfo, text: e.target.value });
-            }
-          }}
-          className="edit_tweet_popup_text"
-        />
-        <button onClick={() => editingTweet.mutate(tweetInfo)}>
-          Submit Edit
-        </button>
+      <div className={isEditVisible ? 'edit_tweet_popup' : 'notActive'}>
+        <Edit />
       </div>
     </div>
   );

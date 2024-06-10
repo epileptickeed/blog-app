@@ -1,9 +1,9 @@
-const User = require("../models/user");
+const User = require('../models/user');
 
 const createTweet = async (req, res) => {
   if (!req.session.user) {
     return res.status(500).send({
-      error: "You need to login first",
+      error: 'You need to login first',
     });
   }
   try {
@@ -13,7 +13,7 @@ const createTweet = async (req, res) => {
 
     if (!text) {
       return res.status(404).send({
-        error: "please type in something",
+        error: 'please type in something',
       });
     }
 
@@ -43,7 +43,7 @@ const createTweet = async (req, res) => {
 const deleteTweet = async (req, res) => {
   if (!req.session.user) {
     return res.status(500).send({
-      error: "Login please",
+      error: 'Login please',
     });
   }
   try {
@@ -61,7 +61,7 @@ const deleteTweet = async (req, res) => {
 
     await currentUser.save();
     return res.status(200).send({
-      message: "deleted",
+      message: 'deleted',
     });
   } catch (error) {
     console.error(error);
@@ -72,8 +72,24 @@ const editTweet = async (req, res) => {
   const { id } = req.params;
   const { email, text } = req.body;
   try {
+    const user = await User.findOne({ email: email });
+    const post = user.posts.find((post) => post.id === id);
+    if (text) {
+      post.text = text;
+    } else {
+      return res.status(500).send({
+        error: 'Cannot be empty',
+      });
+    }
+    await user.save();
+    return res.status(200).send({
+      message: 'edited',
+    });
   } catch (error) {
     console.error(error);
+    return res.status(500).send({
+      error: 'Something went wrong',
+    });
   }
   console.log(text);
 };
