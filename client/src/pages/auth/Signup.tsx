@@ -2,40 +2,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { authSelector } from '../../../redux/authSlice/selector';
 import { setUserEmail, setUserName, setUserPassword } from '../../../redux/authSlice/auth';
-import { toast } from 'react-hot-toast';
-import axios from 'axios';
 import { useMutation } from 'react-query';
+import SignUp from '../../../utils/SignUp';
+import toast from 'react-hot-toast';
 
 const Signup = () => {
-  const mutation = useMutation(SignUp);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { name, email, password } = useSelector(authSelector);
 
-  async function SignUp() {
-    try {
-      const postData = {
-        name,
-        email,
-        password,
-      };
-
-      const { data } = await axios.post('/signup', postData);
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        toast.success('User signed');
-        navigate('/login');
-      }
-    } catch (error) {
-      toast.error('something went wrong');
-      console.error(error);
-    }
-  }
-
-  const handleSignUp = () => {
-    mutation.mutate();
-  };
+  const { mutate } = useMutation(() => SignUp(name, email, password), {
+    onSuccess: () => {
+      toast.success('Signed Up');
+      navigate('/login');
+    },
+    onError: (error: any) => {
+      toast.error(`${error.response.data.error}`);
+    },
+  });
 
   return (
     <div className="signup">
@@ -70,7 +54,7 @@ const Signup = () => {
           onChange={(e) => dispatch(setUserPassword(e.target.value))}
         />
 
-        <button id="submit" onClick={() => handleSignUp()}>
+        <button id="submit" onClick={() => mutate()}>
           Signup
         </button>
       </div>

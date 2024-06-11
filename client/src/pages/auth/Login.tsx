@@ -2,40 +2,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { authSelector } from '../../../redux/authSlice/selector';
 import { setUserEmail, setUserPassword } from '../../../redux/authSlice/auth';
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useMutation } from 'react-query';
+import LoginUser from '../../../utils/Login';
 
 const Login = () => {
-  const mutation = useMutation(Login);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { email, password } = useSelector(authSelector);
 
-  async function Login() {
-    try {
-      const postData = {
-        email,
-        password,
-      };
-
-      const { data } = await axios.post('/login', postData);
-
-      if (data.error) {
-        toast.error(data.error);
-      } else {
-        toast.success('Success');
-        navigate('/');
-      }
-    } catch (error) {
-      toast.error('error');
-      console.error(error);
-    }
-  }
-
-  const handleLogin = () => {
-    mutation.mutate();
-  };
+  const { mutate } = useMutation(() => LoginUser(email, password), {
+    onSuccess: () => {
+      toast.success('Logged In');
+      navigate('/');
+    },
+    onError: (error: any) => {
+      toast.error(`${error.response.data.error}`);
+    },
+  });
 
   return (
     <div className="login">
@@ -53,7 +37,7 @@ const Login = () => {
           value={password}
           onChange={(e) => dispatch(setUserPassword(e.target.value))}
         />
-        <button id="submit" onClick={() => handleLogin()}>
+        <button id="submit" onClick={() => mutate()}>
           Login
         </button>
       </div>

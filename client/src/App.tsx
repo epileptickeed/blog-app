@@ -6,7 +6,6 @@ import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
 import { useQuery } from 'react-query';
 
 function App() {
@@ -28,7 +27,14 @@ function App() {
 
   return (
     <div className="app">
-      <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          duration: 4000,
+          success: { style: { background: '#272727', color: 'white' } },
+          error: { style: { background: '#272727', color: 'white' } },
+        }}
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />

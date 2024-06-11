@@ -3,36 +3,36 @@ const { hashPassword, comparePassword } = require('../helpers/auth');
 
 const registerUser = async (req, res) => {
   try {
-    const { email, name, password } = req.body;
+    const { name, email, password } = req.body;
 
     if (!name) {
-      return res.json({
+      return res.status(500).send({
         error: 'Name is required',
       });
     }
     const nameExists = await User.findOne({ name });
     if (nameExists) {
-      return res.json({
+      return res.status(500).send({
         error: 'name is already taken',
       });
     }
 
     if (!email) {
-      return res.json({
+      return res.status(500).send({
         error: 'email is required',
       });
     }
     const emailExists = await User.findOne({ email });
 
     if (emailExists) {
-      return res.json({
+      return res.status(500).send({
         error: 'email is taken',
       });
     }
 
     if (!password) {
-      return res.json({
-        email: 'password is required',
+      return res.status(500).send({
+        error: 'password is required',
       });
     }
     const hashedPassword = await hashPassword(password);
@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
 
     await user.save();
 
-    return res.json(user);
+    return res.status(200).send(user);
   } catch (error) {
     console.error(error);
   }
@@ -59,7 +59,7 @@ const loginUser = async (req, res) => {
     // console.log(req.sessionID);
     const user = await User.findOne({ email: email });
     if (!user) {
-      return res.json({
+      return res.status(500).send({
         error: 'User not found',
       });
     }
@@ -72,10 +72,10 @@ const loginUser = async (req, res) => {
         email,
         password,
       };
-      return res.json('passwords match');
+      return res.status(200).send('passwords match');
     }
     if (!match) {
-      return res.json({
+      return res.status(500).send({
         error: 'passwords do not match',
       });
     }
