@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -16,6 +16,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  avatar: String,
   posts: [
     {
       avatar: String,
@@ -36,6 +37,6 @@ const userSchema = new Schema({
   liked_posts: Array,
 });
 
-const userModel = mongoose.model("User", userSchema);
+const userModel = mongoose.model('User', userSchema);
 
 module.exports = userModel;

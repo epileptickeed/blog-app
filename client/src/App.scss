@@ -15,15 +15,22 @@
   src: url('./assets/font/SF-Pro-Display-Regular.otf');
 }
 
-body {
+body,
+html {
   background-color: #131313;
   color: var(--clr-white);
   font-family: 'sf';
+  height: 100%;
+}
+
+#root {
+  height: 100%;
 }
 
 .app {
   max-width: 1280px;
-  margin: 1rem auto;
+  margin: 0 auto;
+  height: 100%;
 }
 
 .notActive {
@@ -31,13 +38,31 @@ body {
 }
 
 .navigation {
-  width: 50%;
+  width: 40%;
+  // max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .navigation_inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .user_profile {
+      padding-bottom: 1rem;
+    }
+  }
+
   .logo {
     padding: 0.4rem 1rem;
   }
+
   nav {
     display: flex;
     flex-direction: column;
+    max-height: 100%;
     gap: 0.4rem;
     a {
       display: flex;
@@ -60,6 +85,7 @@ body {
 .main_wrapper {
   display: flex;
   gap: 1rem;
+  height: 100%;
 }
 
 main {

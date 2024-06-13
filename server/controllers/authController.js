@@ -1,9 +1,11 @@
 const User = require('../models/user');
 const { hashPassword, comparePassword } = require('../helpers/auth');
 
+// const defaultImage = require('../../client/public/profile.png');
+
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, defaultAvatar } = req.body;
 
     if (!name) {
       return res.status(500).send({
@@ -43,6 +45,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       posts: [],
       liked_posts: [],
+      avatar: defaultAvatar,
     });
 
     await user.save();
