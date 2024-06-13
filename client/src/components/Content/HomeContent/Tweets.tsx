@@ -7,10 +7,17 @@ import Edit from './Edit';
 import { Item, setIsEditVisible, setTweetInfo } from '../../../../redux/tweetSlice/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { tweetSelector } from '../../../../redux/tweetSlice/selector';
+import { GrFavorite } from 'react-icons/gr';
+import { FcLike } from 'react-icons/fc';
+import { MdDelete } from 'react-icons/md';
+import { FaEdit, FaComment } from 'react-icons/fa';
+
+import { useState } from 'react';
 
 const Tweets = () => {
   const { data, isLoading, isError } = useGetProfile();
   const queryClient = useQueryClient();
+  const [isLiked, setIsLiked] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -24,9 +31,11 @@ const Tweets = () => {
   const likingTweet = useMutation(({ id, email }: Item) => Like(id, email), {
     onSuccess: () => {
       toast.success('Liked!');
+      setIsLiked(true);
     },
     onError: () => {
       toast.error('Problim');
+      setIsLiked(false);
     },
     onSettled: () => {
       queryClient.invalidateQueries();
@@ -82,10 +91,16 @@ const Tweets = () => {
                         email: item.email,
                       } as Item)
                     }>
-                    like
+                    {isLiked ? (
+                      <FcLike size={30} color="grey" />
+                    ) : (
+                      <GrFavorite size={30} color="grey" />
+                    )}
                   </button>
                 </div>
-                <button>comment</button>
+                <button>
+                  <FaComment size={30} color="grey" />
+                </button>
                 <div className="posted_tweet_actions_delete">
                   <button
                     onClick={() =>
@@ -94,11 +109,13 @@ const Tweets = () => {
                         email: item.email,
                       } as Item)
                     }>
-                    delete
+                    <MdDelete size={30} color="grey" />
                   </button>
                 </div>
                 <div className="posted_tweet_actions_edit">
-                  <button onClick={() => editPopup({ ...item } as any)}>edit</button>
+                  <button onClick={() => editPopup({ ...item } as any)}>
+                    <FaEdit size={30} color="grey" />
+                  </button>
                 </div>
               </div>
             </div>

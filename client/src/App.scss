@@ -280,3 +280,30 @@ aside {
 .go2072408551 {
   color: red;
 }
+
+.posted_tweet_actions {
+  display: flex;
+  align-items: center;
+  padding-top: 1rem;
+
+  button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .posted_tweet_actions_like {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .posted_tweet_actions_delete button {
+    path {
+      transition: 0.25s ease all;
+      &:hover {
+        color: tomato;
+      }
+    }
+  }
+}
