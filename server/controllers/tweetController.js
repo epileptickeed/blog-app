@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Posts = require('../models/posts');
 
 const createTweet = async (req, res) => {
   if (!req.session.user) {
@@ -29,6 +30,10 @@ const createTweet = async (req, res) => {
         comments: [],
       };
       user.posts.push(newPost);
+
+      const postModel = new Posts(newPost);
+      await postModel.save();
+
       await user.save();
       return res.status(200).send({
         message: `post added for ${user.name}, input: ${text}`,
@@ -104,9 +109,11 @@ const submitLike = async (req, res) => {
     if (likedPostIndex !== -1) {
       postUser.posts[likedPostIndex].likes += 1;
       postUser.liked_posts.push(id); // Add the liked post ID to the liked_posts array
-      const userThatLiked = postUser.posts.usersThatLiked;
+      // console.log(postUser.liked_posts);
+      const userThatLiked = postUser.posts[0].usersThatLiked;
+
       // if (postUser) return false;
-      console.log(postUser.posts);
+      console.log(userEmail);
       await postUser.save(); // Save the updated user document
       return res.json(postUser);
     } else {

@@ -30,7 +30,9 @@ const userSchema = new Schema({
       },
       name: String,
       text: String,
-      usersThatLiked: Array,
+      usersThatLiked: {
+        userId: String,
+      },
       _id: String,
     },
   ],
