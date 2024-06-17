@@ -7,6 +7,7 @@ import Signup from './pages/auth/Signup';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
 import { useQuery } from 'react-query';
+import Messages from './pages/Messages/Messages';
 
 function App() {
   axios.defaults.baseURL = `http://localhost:8080`;
@@ -40,6 +41,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="messages" element={<Messages />} />
       </Routes>
     </div>
   );

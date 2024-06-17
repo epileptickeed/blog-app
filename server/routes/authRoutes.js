@@ -10,7 +10,7 @@ const {
 } = require('../controllers/tweetController');
 const { getProfile } = require('../controllers/profileController');
 const { getAllTweets } = require('../controllers/allTweetsController');
-// const { submitLike } = require("../controllers/likesController");
+const { findUser } = require('../controllers/messageController');
 
 router.use(
   cors({
@@ -27,5 +27,6 @@ router.get('/getAllTweets', getAllTweets);
 router.post('/submitLike', submitLike);
 router.post('/deleteTweet', deleteTweet);
 router.put('/editTweet/:id', editTweet);
+router.post('/findUser', findUser);
 
 module.exports = router;

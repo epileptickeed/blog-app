@@ -1,6 +1,6 @@
 export const links = [
   {
-    link: '',
+    link: '/',
     title: 'Home',
     icon_first: '/icons/Home-Fill.png',
     icon_second: '/icons/Group.png',
@@ -18,7 +18,7 @@ export const links = [
     icon_second: '/icons/Notifications-Fill.png',
   },
   {
-    link: '',
+    link: '/messages',
     title: 'Messages',
     icon_first: '/icons/Messages.png',
     icon_second: '/icons/Messages-Fill.png',
