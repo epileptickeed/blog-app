@@ -27,6 +27,6 @@ router.get('/getAllTweets', getAllTweets);
 router.post('/submitLike', submitLike);
 router.post('/deleteTweet', deleteTweet);
 router.put('/editTweet/:id', editTweet);
-router.post('/findUser', findUser);
+router.get('/findUser', findUser);
 
 module.exports = router;

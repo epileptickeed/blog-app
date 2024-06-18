@@ -12,7 +12,7 @@ const NavUserProfile = () => {
     return <div>Loading...</div>;
   }
 
-  console.log(data);
+  // console.log(data);
 
   if (data.error) {
     return <></>;
