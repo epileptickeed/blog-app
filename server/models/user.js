@@ -37,6 +37,7 @@ const userSchema = new Schema({
     },
   ],
   liked_posts: Array,
+  usersYouChatWith: Array,
 });
 
 const userModel = mongoose.model('User', userSchema);

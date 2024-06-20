@@ -46,6 +46,7 @@ const registerUser = async (req, res) => {
       posts: [],
       liked_posts: [],
       avatar: defaultAvatar,
+      usersYouChatWith: [],
     });
 
     await user.save();

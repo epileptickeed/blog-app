@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react';
 import Nav from '../../components/Nav/Nav';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
+import addUsersToYourMessages from '../../../utils/addUsersToYourMessages';
+import toast from 'react-hot-toast';
+import useGetProfile from '../../../hooks/useGetProfile';
 
 const Messages = () => {
   const [value, setValue] = useState('');
   const [usersYouChatWith, setUsersYouChatWith] = useState([]);
   const [alike, setAlike] = useState([]);
+  const currentUser = useGetProfile();
+
+  useEffect(() => {
+    setUsersYouChatWith(currentUser?.data?.usersYouChatWith);
+  }, [currentUser]);
+
+  const queryClient = useQueryClient();
 
   const findUser = async () => {
     const data = axios.get('/findUser');
-    // console.log(data);
     return data;
   };
   const users = useQuery({
@@ -24,20 +33,24 @@ const Messages = () => {
   const handleSearch = (e: any) => {
     setValue(e.target.value);
     const searchValue = e.target.value.toLowerCase();
-    if (allUsersNames.includes(searchValue)) {
+    if (allUsersNames?.includes(searchValue)) {
       setAlike(allUsers?.filter((user: any) => user.name === searchValue));
     } else {
       setAlike([]);
     }
   };
 
-  const addUsersToMessages = (item: never) => {
-    if (!usersYouChatWith.includes(item)) {
-      setUsersYouChatWith((curUsers): any => [...curUsers, item]);
-    }
-    setValue('');
-    setAlike([]);
-  };
+  const { mutate } = useMutation((item) => addUsersToYourMessages(item), {
+    onSuccess: () => {
+      setValue('');
+      setAlike([]);
+      toast.success('yes');
+      queryClient.invalidateQueries();
+    },
+    onError: (error) => {
+      toast.error(`${error}`);
+    },
+  });
 
   return (
     <div className="messages">
@@ -55,10 +68,7 @@ const Messages = () => {
             <div className="searchForUsers">
               {alike?.map((item: any, index) => {
                 return (
-                  <div
-                    key={index}
-                    className="user_search"
-                    onClick={() => addUsersToMessages(item as never)}>
+                  <div key={index} className="user_search" onClick={() => mutate(item as never)}>
                     <img src="/profile.png" alt="avatar" width={40} height={40} />
                     <div className="user_info">
                       <div className="user_name">{item.name}</div>
