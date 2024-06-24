@@ -10,6 +10,7 @@ const Messages = () => {
   const [value, setValue] = useState('');
   const [usersYouChatWith, setUsersYouChatWith] = useState([]);
   const [alike, setAlike] = useState([]);
+  const [userYouCurrentlyInChatWith, setUserYouCurrentlyInChatWith] = useState<any[]>([]);
   const currentUser = useGetProfile();
 
   useEffect(() => {
@@ -52,6 +53,19 @@ const Messages = () => {
     },
   });
 
+  const startMessagingWithUser = (user: any) => {
+    setUserYouCurrentlyInChatWith((currentUser) => {
+      if (userYouCurrentlyInChatWith.length < 1) {
+        return [...currentUser, user];
+      } else {
+        userYouCurrentlyInChatWith.pop();
+        return [...currentUser, user];
+      }
+    });
+  };
+  console.log(userYouCurrentlyInChatWith.length);
+  console.log(userYouCurrentlyInChatWith);
+
   return (
     <div className="messages">
       <Nav />
@@ -80,7 +94,10 @@ const Messages = () => {
 
             {usersYouChatWith?.map((item: any) => {
               return (
-                <div key={item._id} className="friends_user">
+                <div
+                  key={item._id}
+                  className="friends_user"
+                  onClick={() => startMessagingWithUser(item)}>
                   <img src="/profile.png" alt="avatar" width={40} height={40} />
                   <div className="user_info">
                     <div className="user_name">{item.name}</div>
@@ -92,7 +109,11 @@ const Messages = () => {
             {''}
           </div>
         </div>
-        <div className="chat"></div>
+        <div className="chat">
+          {userYouCurrentlyInChatWith?.map((user: any) => {
+            return <div>{user?.name}</div>;
+          })}
+        </div>
       </div>
     </div>
   );

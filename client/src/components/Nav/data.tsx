@@ -36,7 +36,7 @@ export const links = [
     icon_second: '/icons/Lists-Fill.png',
   },
   {
-    link: '',
+    link: '/profile',
     title: 'Profile',
     icon_first: '/icons/Profile.png',
     icon_second: '/icons/Profile-Fill.png',
