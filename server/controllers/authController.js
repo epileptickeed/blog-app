@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       posts: [],
       liked_posts: [],
-      avatar: defaultAvatar,
+      avatar: '/public/profile.png',
       usersYouChatWith: [],
     });
 

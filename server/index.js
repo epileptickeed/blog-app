@@ -3,7 +3,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv/config');
 const session = require('express-session');
-const multer = require('multer');
 
 const app = express();
 
@@ -15,22 +14,6 @@ app.use(
     saveUninitialized: false,
   }),
 );
-
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    cb(null, 'uploads');
-  },
-  filename: (_, __, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-app.post('/uploadAvatar', upload.single('image'), (req, res) => {
-  res.json({
-    url: `/uploads/${req.file.originalname}`,
-  });
-});
 
 app.use('/uploads', express.static('uploads'));
 

@@ -52,6 +52,12 @@ html {
 
     .user_profile {
       padding-bottom: 1rem;
+      gap: 1rem;
+      display: flex;
+
+      .user_email {
+        color: #cacaca50;
+      }
     }
   }
 
